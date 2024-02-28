@@ -1,0 +1,166 @@
+mql5
+//+------------------------------------------------------------------+
+//|                                                   Owl Smart Levels|
+//|                                 Copyright © 2021 Forex Robot Easy Team|
+//|                                                        forexroboteasy.com|
+//+------------------------------------------------------------------+
+
+#property copyright 'Copyright © 2021 Forex Robot Easy Team'
+#property link      'forexroboteasy.com'
+#property version   '1.00'
+#property description 'Owl Smart Levels MT5'
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+void OnStart()
+{
+   // Initialize indicators
+   Indicator1.Init();
+   Indicator2.Init();
+   Indicator3.Init();
+
+   // Main loop
+   while(!IsStopped())
+   {
+      // Check for trading signals
+      if(Indicator1.CheckSignal() && Indicator2.CheckSignal() && Indicator3.CheckSignal())
+      {
+         // Place order or perform desired action
+         if(Indicator1.GetSignalType() == BUY && Indicator2.GetSignalType() == BUY && Indicator3.GetSignalType() == BUY)
+         {
+            // Place buy order
+            OrderSend(Symbol(), OP_BUY, 0.01, Ask, 10, 0, 0, 'Buy Order', MagicNumber);
+         }
+         else if(Indicator1.GetSignalType() == SELL && Indicator2.GetSignalType() == SELL && Indicator3.GetSignalType() == SELL)
+         {
+            // Place sell order
+            OrderSend(Symbol(), OP_SELL, 0.01, Bid, 10, 0, 0, 'Sell Order', MagicNumber);
+         }
+      }
+
+      // Check for trade exit conditions
+      if(IsTradeOpen())
+      {
+         if(ShouldCloseTrade())
+         {
+            // Close trade
+            CloseTrade();
+         }
+      }
+
+      // Sleep for a while before next iteration
+      Sleep(1000);
+   }
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+class Indicator1
+{
+   bool initialized;
+   bool signal;
+
+   void Init()
+   {
+      // Initialize indicator settings
+      initialized = true;
+   }
+
+   bool CheckSignal()
+   {
+      // Perform signal calculation
+      signal = true;
+      return signal;
+   }
+
+   int GetSignalType()
+   {
+      // Determine signal type
+      return BUY;
+   }
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+class Indicator2
+{
+   bool initialized;
+   bool signal;
+
+   void Init()
+   {
+      // Initialize indicator settings
+      initialized = true;
+   }
+
+   bool CheckSignal()
+   {
+      // Perform signal calculation
+      signal = true;
+      return signal;
+   }
+
+   int GetSignalType()
+   {
+      // Determine signal type
+      return SELL;
+   }
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+class Indicator3
+{
+   bool initialized;
+   bool signal;
+
+   void Init()
+   {
+      // Initialize indicator settings
+      initialized = true;
+   }
+
+   bool CheckSignal()
+   {
+      // Perform signal calculation
+      signal = true;
+      return signal;
+   }
+
+   int GetSignalType()
+   {
+      // Determine signal type
+      return BUY;
+   }
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+bool IsTradeOpen()
+{
+   // Check if any trade is open
+   return true;
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+bool ShouldCloseTrade()
+{
+   // Check if trade should be closed
+   return true;
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+void CloseTrade()
+{
+   // Close the trade
+   OrderClose(OrderTicket(), OrderLots(), OrderClosePrice(), 0, clrRed);
+}
